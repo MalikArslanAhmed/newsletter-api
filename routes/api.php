@@ -20,3 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('add-email', 'EmailSubscriptionController@AddEmail');
 Route::post('unsubscribe-email', 'EmailSubscriptionController@DeleteEmail');
+
+Route::post('add-newsletter', 'NewsletterController@AddNewsletter');
+Route::post('delete-newsletter', 'NewsletterController@DeleteNewsletter');
+Route::get('get-newsletter', 'NewsletterController@NewsletterList');
