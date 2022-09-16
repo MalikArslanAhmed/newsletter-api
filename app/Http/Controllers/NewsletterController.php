@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Helpers\Response as R;
-use Validator, DB;
+use Validator, DB, Mail;
 use App\Models\Newsletter;
+use App\Models\EmailSubscription;
 
 class NewsletterController extends Controller
 {
@@ -34,7 +35,19 @@ class NewsletterController extends Controller
             DB::rollback();
             return $e;
         }
+        $list = EmailSubscription::get();
+        foreach ($list as $value) {
+            $this->html_email($value);
+        }
         return R::Success('Newsletter dispatched successfully', $add_data);
+    }
+    public function html_email($value)
+    {
+        $value = array('email' => $value['email']);
+        Mail::send('mail', $value, function ($message) use ($value) {
+            $message->to($value['email'], 'Newsletter')->subject('Newsletter Arrived');
+            $message->from('malikzarslan44@gmail.com', 'Newsletter');
+        });
     }
 
     public function NewsletterList()
